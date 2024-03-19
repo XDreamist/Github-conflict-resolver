@@ -75,15 +75,22 @@ def storeChanges(changes, base_path):
             f.write(deleted_file + "\n")
 
 def restoreChanges():
-    changes_dir = os.path.join(os.getcwd(), "changes")
+    changes_dir = os.path.join(os.getcwd(), "changes\\")
     restore_dir = ""
     with open("dan.txt", "r") as f:
         restore_dir = f.readline()
+        restore_dir = restore_dir.rstrip("\n")
     if os.path.exists(changes_dir):
         try:
-            shutil.rmtree(os.getcwd())
-            shutil.copytree(changes_dir, restore_dir)
-            print("Changes restored successfully.")
+            changes_contents = os.listdir(changes_dir)
+            if changes_contents:
+                source_to_restore = changes_contents[0]
+                source_path = os.path.join(changes_dir, source_to_restore)
+                destination_path = restore_dir + os.path.relpath(source_path).lstrip("changes")
+                shutil.copytree(source_path, destination_path)
+                print("Changes restored successfully.")
+            else:
+                print("No changes to restore.")
         except Exception as e:
             print(f"An error occurred while restoring changes: {e}")
     else:

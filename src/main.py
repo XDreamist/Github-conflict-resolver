@@ -78,8 +78,7 @@ def restoreChanges():
     changes_dir = os.path.join(os.getcwd(), "changes")
     restore_dir = ""
     with open("dan.txt", "r") as f:
-        restore_dir = f.readline(0)
-    restore_dir = "I:\\"
+        restore_dir = f.readline()
     if os.path.exists(changes_dir):
         try:
             shutil.rmtree(os.getcwd())

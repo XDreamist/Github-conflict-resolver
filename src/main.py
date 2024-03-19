@@ -61,22 +61,29 @@ def storeChanges(changes, base_path):
                     print(f"An error occurred: {e}")
 
             elif changes[relative_file_path] == "modified:":
-                file_name = os.path.basename(relative_file_path)
-                shutil.copy2(source_file_path, os.path.join(changes_dir, file_name))
-                print(f"Copied {relative_file_path} to {changes_dir}")
+                directory_path = os.path.dirname(relative_file_path)
+                store_path = os.path.join(changes_dir, os.path.relpath(directory_path))
+                os.makedirs(store_path, exist_ok=True)
+                shutil.copy2(source_file_path, store_path)
+                print(f"Copied {relative_file_path} to {store_path}")
         else:
             print(f"Error: File {source_file_path} does not exist.")
 
-    with open("changes\deleted_files.txt", "w") as f:
+    with open("dan.txt", "w") as f:
+        f.write(base_path + "\n\n Deleted Changes: \n")
         for deleted_file in deleted_files:
             f.write(deleted_file + "\n")
 
 def restoreChanges():
     changes_dir = os.path.join(os.getcwd(), "changes")
+    restore_dir = ""
+    with open("dan.txt", "r") as f:
+        restore_dir = f.readline(0)
+    restore_dir = "I:\\"
     if os.path.exists(changes_dir):
         try:
             shutil.rmtree(os.getcwd())
-            shutil.copytree(changes_dir, os.getcwd())
+            shutil.copytree(changes_dir, restore_dir)
             print("Changes restored successfully.")
         except Exception as e:
             print(f"An error occurred while restoring changes: {e}")

@@ -87,7 +87,7 @@ def restoreChanges():
                 source_to_restore = changes_contents[0]
                 source_path = os.path.join(changes_dir, source_to_restore)
                 destination_path = restore_dir + os.path.relpath(source_path).lstrip("changes")
-                shutil.copytree(source_path, destination_path)
+                shutil.copytree(source_path, destination_path, dirs_exist_ok=True)
                 print("Changes restored successfully.")
             else:
                 print("No changes to restore.")
